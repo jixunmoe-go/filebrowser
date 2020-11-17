@@ -108,7 +108,7 @@ Also, if the database path doesn't exist, File Browser will enter into
 the quick setup mode and a new database will be bootstraped and a new
 user created with the credentials from options "username" and "password".
 
-## Nginx proxy
+### Nginx proxy
 
 When running behind NGINX Proxy, you can also specify "--nginx-accel-path"
 to let nginx serve static files; for example, you can specify:
@@ -117,15 +117,23 @@ to let nginx serve static files; for example, you can specify:
 
 and with in your config file:
 
-	location /internal {
-		internal;
-		alias /path/to/root;
-	}
+    location /fast-download {
+        internal;
+        sendfile on;
+        # Other optimisations:
+        # https://docs.nginx.com/nginx/admin-guide/web-server/serving-static-content/#optimizing-performance-for-serving-content
+        alias /path/to/root;
+    }
 
-	location / {
-		proxy_pass ...;
-		...
-	}
+    root /path/to/frontend/dist;
+    location / {
+        try_files $uri @filebrowser;
+    }
+
+    location @backend {
+        proxy_pass ...;
+        ...
+    }
 `,
 	Run: python(func(cmd *cobra.Command, args []string, d pythonData) {
 		log.Println(cfgFile)
