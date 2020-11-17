@@ -171,7 +171,9 @@ export default {
       action(overwrite, rename)
     },
     click: function (event) {
-      if (!this.$store.state.multiple) {
+      // If the user were simply clicking an item,
+      // the expected behaviour should be open.
+      if (!this.$store.state.multiple && !event.shiftKey && !event.ctrlKey) {
         return this.open(event);
       }
       if (this.selectedCount !== 0) event.preventDefault()
