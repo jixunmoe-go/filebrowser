@@ -92,6 +92,9 @@ var rawHandler = withUser(func(w http.ResponseWriter, r *http.Request, d *data) 
 	}
 
 	if !file.IsDir {
+		if d.server.NginxAccelPath != "" {
+			return nginxAccelFileHandler(w, d.server.NginxAccelPath, file)
+		}
 		return rawFileHandler(w, r, file)
 	}
 
@@ -182,6 +185,11 @@ func rawDirHandler(w http.ResponseWriter, r *http.Request, d *data, file *files.
 	}
 
 	return 0, nil
+}
+
+func nginxAccelFileHandler(w http.ResponseWriter, nginxAccelDir string, file *files.FileInfo) (int, error) {
+	w.Header().Set("X-Accel-Redirect", nginxAccelDir+file.Path)
+	return http.StatusOK, nil
 }
 
 func rawFileHandler(w http.ResponseWriter, r *http.Request, file *files.FileInfo) (int, error) {

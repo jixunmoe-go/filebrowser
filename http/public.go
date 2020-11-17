@@ -68,6 +68,9 @@ var publicShareHandler = withHashFile(func(w http.ResponseWriter, r *http.Reques
 var publicDlHandler = withHashFile(func(w http.ResponseWriter, r *http.Request, d *data) (int, error) {
 	file := d.raw.(*files.FileInfo)
 	if !file.IsDir {
+		if d.server.NginxAccelPath != "" {
+			return nginxAccelFileHandler(w, d.server.NginxAccelPath, file)
+		}
 		return rawFileHandler(w, r, file)
 	}
 

@@ -66,6 +66,7 @@ func addServerFlags(flags *pflag.FlagSet) {
 	flags.Bool("disable-thumbnails", false, "disable image thumbnails")
 	flags.Bool("disable-preview-resize", false, "disable resize of image previews")
 	flags.Bool("disable-exec", false, "disables Command Runner feature")
+	flags.StringP("nginx-accel-path", "", "", "When running behind nginx, specify the uri path nginx is listen on.")
 }
 
 var rootCmd = &cobra.Command{
@@ -105,7 +106,27 @@ set FB_DATABASE.
 
 Also, if the database path doesn't exist, File Browser will enter into
 the quick setup mode and a new database will be bootstraped and a new
-user created with the credentials from options "username" and "password".`,
+user created with the credentials from options "username" and "password".
+
+## Nginx proxy
+
+When running behind NGINX Proxy, you can also specify "--nginx-accel-path"
+to let nginx serve static files; for example, you can specify:
+
+    --nginx-accel-path "/fast-download"
+
+and with in your config file:
+
+	location /internal {
+		internal;
+		alias /path/to/root;
+	}
+
+	location / {
+		proxy_pass ...;
+		...
+	}
+`,
 	Run: python(func(cmd *cobra.Command, args []string, d pythonData) {
 		log.Println(cfgFile)
 
@@ -245,6 +266,10 @@ func getRunParams(flags *pflag.FlagSet, st *storage.Storage) *settings.Server {
 
 	_, disableExec := getParamB(flags, "disable-exec")
 	server.EnableExec = !disableExec
+
+	if val, set := getParamB(flags, "nginx-accel-path"); set {
+		server.NginxAccelPath = strings.TrimRight(val, "/")
+	}
 
 	return server
 }

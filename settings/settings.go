@@ -41,6 +41,7 @@ type Server struct {
 	EnableThumbnails bool   `json:"enableThumbnails"`
 	ResizePreview    bool   `json:"resizePreview"`
 	EnableExec       bool   `json:"enableExec"`
+	NginxAccelPath   string `json:"nginxAccelPath"`
 }
 
 // Clean cleans any variables that might need cleaning.
