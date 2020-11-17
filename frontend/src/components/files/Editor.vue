@@ -104,11 +104,17 @@ export default {
       this.$router.push({ path: uri })
     },
     keyEvent (event) {
+      const { key } = event;
+
       if (!event.ctrlKey && !event.metaKey) {
+        if (key === 'Escape' || key === 'Esc') {
+          this.back();
+        }
+
         return
       }
 
-      if (String.fromCharCode(event.which).toLowerCase() !== 's') {
+      if (key.toLowerCase() !== 's') {
         return
       }
 

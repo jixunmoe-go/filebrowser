@@ -35,6 +35,7 @@ import Preview from '@/components/files/Preview'
 import Listing from '@/components/files/Listing'
 import { files as api } from '@/api'
 import { mapGetters, mapState, mapMutations } from 'vuex'
+import url from "@/utils/url"
 
 function clean (path) {
   return path.endsWith('/') ? path.slice(0, -1) : path
@@ -159,10 +160,23 @@ export default {
         this.setLoading(false)
       }
     },
+    exitPreviewOrEditor() {
+      this.$store.commit('setPreviewMode', false)
+      let uri = url.removeLastDir(this.$route.path) + '/'
+      this.$router.push({ path: uri })
+    },
     keyEvent (event) {
+      const { key } = event;
+      const isEsc = key === 'Escape' || key === 'Esc';
+
+      if (this.isPreview || this.isEditor) {
+        this.exitPreviewOrEditor()
+        return
+      }
+
       if (this.show !== null) {
         // Esc!
-        if (event.keyCode === 27) {
+        if (isEsc) {
           this.$store.commit('closeHovers')
         }
 
@@ -170,7 +184,7 @@ export default {
       }
 
       // Esc!
-      if (event.keyCode === 27) {        
+      if (isEsc) {
         // If we're on a listing, unselect all
         // files and folders.
         if (this.isListing) {
@@ -179,7 +193,7 @@ export default {
       }
 
       // Del!
-      if (event.keyCode === 46) {
+      if (key === 'Del' || key === 'Delete') {
         if (this.isEditor ||
           !this.isFiles ||
           this.loading ||
@@ -191,13 +205,13 @@ export default {
       }
 
       // F1!
-      if (event.keyCode === 112) {
+      if (key === 'F1') {
         event.preventDefault()
         this.$store.commit('showHover', 'help')
       }
 
       // F2!
-      if (event.keyCode === 113) {
+      if (key === 'F2') {
         if (this.isEditor ||
           !this.isFiles ||
           this.loading ||
@@ -212,7 +226,7 @@ export default {
       if (event.ctrlKey || event.metaKey) {
         if (this.isEditor) return
 
-        if (String.fromCharCode(event.which).toLowerCase() === 's') {
+        if (key.toLowerCase() === 's') {
           event.preventDefault()
 
           if (this.req.kind !== 'editor') {
