@@ -171,6 +171,9 @@ export default {
       action(overwrite, rename)
     },
     click: function (event) {
+      if (!this.$store.state.multiple) {
+        return this.open(event);
+      }
       if (this.selectedCount !== 0) event.preventDefault()
       if (this.$store.state.selected.indexOf(this.index) !== -1) {
         this.removeSelected(this.index)
