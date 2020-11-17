@@ -114,6 +114,7 @@ export default {
     ]),
     ...mapState([
       'req',
+      'selected',
       'user',
       'loading',
       'reload',
@@ -128,7 +129,13 @@ export default {
       return this.isListing && this.user.perm.create
     },
     showDownloadButton () {
-      return this.isFiles && this.user.perm.download
+      if (this.isFiles && this.selectedCount > 0) {
+        if (this.selectedCount === 1 && !this.req.items[this.selected[0]].isDir) {
+          return this.user.perm.download
+        }
+        return this.user.perm.batch
+      }
+      return false
     },
     showDeleteButton () {
       return this.isFiles && (this.isListing

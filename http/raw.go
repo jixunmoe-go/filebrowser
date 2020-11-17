@@ -152,6 +152,10 @@ func addFile(ar archiver.Writer, d *data, path, commonPath string) error {
 }
 
 func rawDirHandler(w http.ResponseWriter, r *http.Request, d *data, file *files.FileInfo) (int, error) {
+	if !d.user.Perm.Batch {
+		return http.StatusAccepted, nil
+	}
+
 	filenames, err := parseQueryFiles(r, file, d.user)
 	if err != nil {
 		return http.StatusInternalServerError, err

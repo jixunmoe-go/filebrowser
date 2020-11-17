@@ -184,6 +184,7 @@
       "create": "建立檔案和資料夾",
       "delete": "刪除檔案和資料夾",
       "download": "下載",
+      "batch": "批量下載",
       "modify": "編輯檔案",
       "execute": "執行命令",
       "rename": "重命名或移動檔案/資料夾",
