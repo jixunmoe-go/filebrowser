@@ -192,7 +192,7 @@ func rawDirHandler(w http.ResponseWriter, r *http.Request, d *data, file *files.
 }
 
 func nginxAccelFileHandler(w http.ResponseWriter, nginxAccelDir string, file *files.FileInfo) (int, error) {
-	w.Header().Set("X-Accel-Redirect", nginxAccelDir+file.Path)
+	w.Header().Set("X-Accel-Redirect", nginxAccelDir+url.PathEscape(file.Path))
 	return http.StatusOK, nil
 }
 
