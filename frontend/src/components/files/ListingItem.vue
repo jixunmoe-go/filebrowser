@@ -1,5 +1,5 @@
 <template>
-  <div class="item"
+  <a class="item"
   role="button"
   tabindex="0"
   :draggable="isDraggable"
@@ -27,7 +27,7 @@
         <time :datetime="modified">{{ humanTime() }}</time>
       </p>
     </div>
-  </div>
+  </a>
 </template>
 
 <script>
@@ -171,12 +171,12 @@ export default {
       action(overwrite, rename)
     },
     click: function (event) {
+      event.preventDefault()
       // If the user were simply clicking an item,
       // the expected behaviour should be open.
       if (!this.$store.state.multiple && !event.shiftKey && !event.ctrlKey) {
         return this.open(event);
       }
-      if (this.selectedCount !== 0) event.preventDefault()
       if (this.$store.state.selected.indexOf(this.index) !== -1) {
         this.removeSelected(this.index)
         return
