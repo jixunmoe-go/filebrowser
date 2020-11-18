@@ -3,6 +3,7 @@ package http
 import (
 	"encoding/json"
 	"errors"
+	"github.com/filebrowser/filebrowser/v2/files"
 	"net/http"
 	"net/url"
 	"os"
@@ -24,6 +25,19 @@ func renderJSON(w http.ResponseWriter, _ *http.Request, data interface{}) (int, 
 	}
 
 	return 0, nil
+}
+
+func renderFileList(w http.ResponseWriter, r *http.Request, file *files.FileInfo, sorting files.Sorting) (int, error) {
+	file.Listing.Sorting = sorting
+	var filtered []*files.FileInfo
+	for _, file := range file.Listing.Items {
+		if file.Name[0] != '.' {
+			filtered = append(filtered, file)
+		}
+	}
+	file.Listing.Items = filtered
+	file.Listing.ApplySort()
+	return renderJSON(w, r, file)
 }
 
 func errToStatus(err error) int {
