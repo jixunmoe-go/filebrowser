@@ -170,7 +170,9 @@ export default {
       const isEsc = key === 'Escape' || key === 'Esc';
 
       if (this.isPreview || this.isEditor) {
-        this.exitPreviewOrEditor()
+        if (isEsc) {
+          this.exitPreviewOrEditor()
+        }
         return
       }
 
