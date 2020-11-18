@@ -30,6 +30,11 @@ func Search(fs afero.Fs, scope, query string, checker rules.Checker, found func(
 		originalPath = "/" + originalPath
 		path := originalPath
 
+		// filter out file/dir start with dot.
+		if strings.Contains(path, "/.") {
+			return nil
+		}
+
 		if path == scope {
 			return nil
 		}
