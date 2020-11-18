@@ -1,5 +1,6 @@
 <template>
   <a class="item"
+  :href="fullPath"
   role="button"
   tabindex="0"
   :draggable="isDraggable"
@@ -58,6 +59,9 @@ export default {
       if (this.type === 'audio') return 'volume_up'
       if (this.type === 'video') return 'movie'
       return 'insert_drive_file'
+    },
+    fullPath() {
+      return this.url.replace(/^\/files\//, '/')
     },
     isDraggable () {
       return this.user.perm.rename
