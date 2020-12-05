@@ -32,7 +32,8 @@
     "toggleSidebar": "Toggle sidebar",
     "update": "Update",
     "upload": "Upload",
-    "permalink": "Get Permanent Link"
+    "permalink": "Get Permanent Link",
+    "hideDotfiles": "Hide dotfiles"
   },
   "success": {
     "linkCopied": "Link copied!"
@@ -173,6 +174,7 @@
     "globalRules": "This is a global set of allow and disallow rules. They apply to every user. You can define specific rules on each user's settings to override this ones.",
     "allowSignup": "Allow users to signup",
     "createUserDir": "Auto create user home dir while adding new user",
+    "singleClick": "Use single clicks to open files and directories",
     "insertRegex": "Insert regex expression",
     "insertPath": "Insert the path",
     "userUpdated": "User updated!",
@@ -189,7 +191,8 @@
       "execute": "Execute commands",
       "rename": "Rename or move files and directories",
       "share": "Share files"
-    }
+    },
+    "hideDotfiles": "Hide dotfiles"
   },
   "sidebar": {
     "help": "Help",

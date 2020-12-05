@@ -7,8 +7,8 @@
   @dragstart="dragStart"
   @dragover="dragOver"
   @drop="drop"
-  @click="click"
-  @dblclick="open"
+  @click="itemClick"
+  @dblclick="dblclick"
   @touchstart="touchstart"
   :data-dir="isDir"
   :aria-label="name"
@@ -174,13 +174,14 @@ export default {
 
       action(overwrite, rename)
     },
+    itemClick: function(event) {
+      event.preventDefault();
+
+      if (this.user.singleClick && !this.$store.state.multiple) this.open()
+      else this.click(event)
+    },
     click: function (event) {
-      event.preventDefault()
-      // If the user were simply clicking an item,
-      // the expected behaviour should be open.
-      if (!this.$store.state.multiple && !event.shiftKey && !event.ctrlKey) {
-        return this.open(event);
-      }
+      if (!this.user.singleClick && this.selectedCount !== 0) event.preventDefault()
       if (this.$store.state.selected.indexOf(this.index) !== -1) {
         this.removeSelected(this.index)
         return
@@ -207,8 +208,11 @@ export default {
         return
       }
 
-      if (!event.ctrlKey && !this.$store.state.multiple) this.resetSelected()
+      if (!this.user.singleClick && !event.ctrlKey && !this.$store.state.multiple) this.resetSelected()
       this.addSelected(this.index)
+    },
+    dblclick: function () {
+      if (!this.user.singleClick) this.open()
     },
     touchstart () {
       setTimeout(() => {

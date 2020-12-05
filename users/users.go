@@ -28,11 +28,13 @@ type User struct {
 	Locale       string        `json:"locale"`
 	LockPassword bool          `json:"lockPassword"`
 	ViewMode     ViewMode      `json:"viewMode"`
+	SingleClick  bool          `json:"singleClick"`
 	Perm         Permissions   `json:"perm"`
 	Commands     []string      `json:"commands"`
 	Sorting      files.Sorting `json:"sorting"`
 	Fs           afero.Fs      `json:"-" yaml:"-"`
 	Rules        []rules.Rule  `json:"rules"`
+	HideDotfiles bool          `json:"hideDotfiles"`
 }
 
 // GetRules implements rules.Provider.
