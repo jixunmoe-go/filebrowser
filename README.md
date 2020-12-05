@@ -8,9 +8,10 @@ Changes:
 * Nginx's `X-Accel-Redirect`
 * Add "Batch Download" permission.
 * UI Changes
-  * `ESC` to exit edit/preview;
-  * Single-click to open instead of double
-    * Unless you hold ctrl/shift or enable multi-select mode.
+  * Updated the logo to "Filehub"
+  * <kbd>Ctrl</kbd>-<kbd>f</kbd> will not hijack browser's find functionality.
+  * <kbd>ESC</kbd> to exit edit/preview;
+  * ~~Single-click to open instead of double~~ Using upstream implementation.
 
 ### Nginx proxy
 
@@ -43,9 +44,9 @@ and with in your config file:
 
 ---
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/filebrowser/logo/master/banner.png" width="550"/>
-</p>
+<h2 style="text-align: center">
+  <img alt="logo" src="https://cdn.jsdelivr.net/gh/jixunmoe-go/filebrowser@84ecca45defb77fb956d0ea2b7eafdbca6053abf/frontend/public/img/logo.svg" width="200"/><br>Filehub (A "File Browser" fork)
+</h2>
 
 ![Preview](https://user-images.githubusercontent.com/5447088/50716739-ebd26700-107a-11e9-9817-14230c53efd2.gif)
 
