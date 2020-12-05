@@ -13,6 +13,15 @@ Changes:
   * <kbd>ESC</kbd> to exit edit/preview;
   * ~~Single-click to open instead of double~~ Using upstream implementation.
 
+Generate logo:
+
+```
+cd frontend/public/img
+inkscape -w 16 -h 16 -y 0 -e icons/favicon-32x32.png logo.svg
+inkscape -w 32 -h 32 -y 0 -e icons/favicon-32x32.png logo.svg
+inkscape -w 48 -h 48 -y 0 -e - logo.svg | convert - icons/favicon.ico
+```
+
 ### Nginx proxy
 
 When running behind NGINX Proxy, you can also specify "--nginx-accel-path"
