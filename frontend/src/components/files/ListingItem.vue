@@ -14,7 +14,7 @@
   :aria-label="name"
   :aria-selected="isSelected">
     <div>
-      <img v-if="type==='image' && isThumbsEnabled" v-lazy="thumbnailUrl">
+      <img v-if="type==='image' && isThumbsEnabled && !isSharing" v-lazy="thumbnailUrl">
       <i v-else class="material-icons">{{ icon }}</i>
     </div>
 
@@ -48,8 +48,12 @@ export default {
   },
   props: ['name', 'isDir', 'url', 'type', 'size', 'modified', 'index'],
   computed: {
-    ...mapState(['selected', 'req', 'user', 'jwt']),
-    ...mapGetters(['selectedCount']),
+    ...mapState(['user', 'selected', 'req', 'jwt']),
+    ...mapGetters(['selectedCount', 'isSharing']),
+    singleClick () {
+      if (this.isSharing) return false
+      return this.user.singleClick
+    },
     isSelected () {
       return (this.selected.indexOf(this.index) !== -1)
     },
@@ -64,10 +68,10 @@ export default {
       return this.url.replace(/^\/files\//, '/')
     },
     isDraggable () {
-      return this.user.perm.rename
+      return !this.isSharing && this.user.perm.rename
     },
     canDrop () {
-      if (!this.isDir) return false
+      if (!this.isDir || this.isSharing) return false
 
       for (let i of this.selected) {
         if (this.req.items[i].url === this.url) {
@@ -176,12 +180,11 @@ export default {
     },
     itemClick: function(event) {
       event.preventDefault();
-
-      if (this.user.singleClick && !this.$store.state.multiple) this.open()
+      if (this.singleClick && !this.$store.state.multiple) this.open()
       else this.click(event)
     },
     click: function (event) {
-      if (!this.user.singleClick && this.selectedCount !== 0) event.preventDefault()
+      if (!this.singleClick && this.selectedCount !== 0) event.preventDefault()
       if (this.$store.state.selected.indexOf(this.index) !== -1) {
         this.removeSelected(this.index)
         return
@@ -208,11 +211,11 @@ export default {
         return
       }
 
-      if (!this.user.singleClick && !event.ctrlKey && !this.$store.state.multiple) this.resetSelected()
+      if (!this.singleClick && !event.ctrlKey && !event.metaKey && !this.$store.state.multiple) this.resetSelected()
       this.addSelected(this.index)
     },
     dblclick: function () {
-      if (!this.user.singleClick) this.open()
+      if (!this.singleClick) this.open()
     },
     touchstart () {
       setTimeout(() => {
